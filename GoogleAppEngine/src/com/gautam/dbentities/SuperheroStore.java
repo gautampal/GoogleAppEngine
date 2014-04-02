@@ -11,48 +11,44 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.google.appengine.api.datastore.Key;
  
 @Entity
-@Table(name = "DBUSER")
-
-public class DBUser implements Serializable {
+public class SuperheroStore implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 224819984138049L;
-	private long userId;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Key key;
+	
 	private String username;
 	private String createdBy;
 	private Date createdDate;
  
-	public DBUser() {
+	public SuperheroStore() {
 	}
  
-	public DBUser(long userId, String username, String createdBy,
+	public SuperheroStore(Key key, String username, String createdBy,
 			Date createdDate) {
-		this.userId = userId;
+		this.key = key;
 		this.username = username;
 		this.createdBy = createdBy;
 		this.createdDate = createdDate;
 	}
  
-	@Id
-	@Column(name = "USER_ID", unique = true, nullable = false)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long getUserId() {
-		return this.userId;
-	}
+
+	public Key getKey() {
+        return key;
+    }
  
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
- 
-	@Column(name = "USERNAME", nullable = false, length = 20)
+	@Column(nullable = false, length = 20)
 	public String getUsername() {
 		return this.username;
 	}
@@ -61,7 +57,7 @@ public class DBUser implements Serializable {
 		this.username = username;
 	}
  
-	@Column(name = "CREATED_BY", nullable = false, length = 20)
+	@Column(nullable = false, length = 20)
 	public String getCreatedBy() {
 		return this.createdBy;
 	}
@@ -71,7 +67,7 @@ public class DBUser implements Serializable {
 	}
  
 	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATED_DATE", nullable = false, length = 7)
+	@Column(nullable = false, length = 7)
 	public Date getCreatedDate() {
 		return this.createdDate;
 	}
@@ -83,6 +79,6 @@ public class DBUser implements Serializable {
 	@Override
 	public String toString()
 	{
-		return "USER_ID:" + userId + " Username:" + username + '\n';
+		return "ID:" + getKey() + " Hero name:" + username; //+ " Created by:" + createdBy + " on " + createdDate;
 	}
 }
